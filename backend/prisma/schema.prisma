@@ -13,6 +13,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ChallengeStatus {
+  UPCOMING
+  IN_PROGRESS
+  COMPLETED
+  ENDED
+}
+
+enum ChallengeVisibility {
+  PUBLIC
+  PRIVATE
+}
+
+enum VerificationMethod {
+  GOOGLE_FIT
+  APPLE_HEALTH
+  FITBIT
+}
+
+enum ParticipantStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+}
+
 model User {
   id                Int      @id @default(autoincrement())
   name              String?
@@ -23,4 +47,50 @@ model User {
   password          String
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+
+  // Relationships
+  challenges       Challenge[]
+  challengeEntries ChallengeParticipant[]
+}
+
+model Challenge {
+  id                 String              @id @default(uuid())
+  name               String
+  description        String?
+  duration           Int
+  goalSteps          Int
+  numParticipants    Int                 @default(0)
+  prizeMoney         Decimal             @default(0.0)
+  entryAmount        Decimal             @default(0.0)
+  status             ChallengeStatus
+  featured           Boolean             @default(false)
+  startDate          DateTime
+  endDate            DateTime
+  visibility         ChallengeVisibility
+  verificationMethod VerificationMethod
+  winnerDistribution Json?
+  createdBy          Int // Reference to User ID
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  // Relationships
+  creator      User                   @relation(fields: [createdBy], references: [id])
+  participants ChallengeParticipant[]
+
+  @@map("challenges")
+}
+
+model ChallengeParticipant {
+  id          String            @id @default(uuid())
+  userId      Int
+  challengeId String
+  progress    Int               @default(0)
+  status      ParticipantStatus
+  joinedAt    DateTime          @default(now())
+
+  // Relationships
+  user      User      @relation(fields: [userId], references: [id])
+  challenge Challenge @relation(fields: [challengeId], references: [id])
+
+  @@map("challenge_participants")
 }

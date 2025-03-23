@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { loginSchema, registerSchema } from "../scehma/auth.schema";
+import { loginSchema, registerSchema } from "../schemas/auth.schema";
 import prisma from "../config/prisma";
 import {
   comparePassword,
@@ -10,7 +10,7 @@ import {
 
 export const loginController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const body = loginSchema.safeParse(req.body);
@@ -30,7 +30,7 @@ export const loginController = async (
 
     const checkPassword = await comparePassword(
       body.data.password,
-      existingUser.password
+      existingUser.password,
     );
 
     if (!checkPassword) {
@@ -49,8 +49,9 @@ export const loginController = async (
     });
 
     const { password, ...userWithoutPassword } = existingUser;
-res.status(200).json({ accessToken, refreshToken, user: userWithoutPassword });
-
+    res
+      .status(200)
+      .json({ accessToken, refreshToken, user: userWithoutPassword });
   } catch (error) {
     console.error("Error at the login endpoint", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -59,7 +60,7 @@ res.status(200).json({ accessToken, refreshToken, user: userWithoutPassword });
 
 export const registerController = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const body = registerSchema.safeParse(req.body);

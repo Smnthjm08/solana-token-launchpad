@@ -5,12 +5,12 @@ import { envConfig } from "../config/env";
 export const authMiddleware = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   const authHeader = req.headers.authorization;
-  console.log("authHeader", authHeader);
+  // console.log("authHeader", authHeader);
   const token = authHeader && authHeader.split(" ")[1];
-  console.log("token", token);
+  // console.log("token", token);
 
   if (!token) {
     res.status(401).json({ error: "Unauthorized, please login to continue." });

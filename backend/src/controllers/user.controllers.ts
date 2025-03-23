@@ -28,7 +28,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 
 export const updateUser = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const id = Number(req.params.id);
@@ -64,7 +64,7 @@ export const updateUser = async (
 
 export const deleteUser = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const id = Number(req.params.id);
