@@ -12,7 +12,7 @@ export const comparePassword = (plain: string, hashed: string) => {
 
 export const generateAccessToken = (user: any) => {
   return jwt.sign({ id: user.id, email: user.email }, envConfig.JWT_SECRET, {
-    expiresIn: "15m",
+    expiresIn: "40m",
   });
 };
 
