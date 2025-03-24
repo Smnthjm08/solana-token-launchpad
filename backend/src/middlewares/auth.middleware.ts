@@ -3,15 +3,19 @@ import jwt from "jsonwebtoken";
 import { envConfig } from "../config/env";
 
 interface UserPayload {
-  id: string;
+  id: number;
+  email: string;
 }
 
-export interface AuthenticatedRequest extends Request {
-  user?: UserPayload; // Define explicitly
+// Extend Express Request type to include user
+declare module "express-serve-static-core" {
+  interface Request {
+    user?: UserPayload;
+  }
 }
 
 export const authMiddleware = (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction,
 ): void => {
@@ -28,7 +32,7 @@ export const authMiddleware = (
       return res.status(403).json({ error: "Forbidden, invalid token." });
     }
 
-    req.user = decoded as UserPayload; // Explicitly cast to UserPayload
+    req.user = decoded as UserPayload; // Explicitly set req.user
     next();
   });
 };

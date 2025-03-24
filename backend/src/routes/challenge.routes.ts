@@ -6,7 +6,7 @@ import {
   getAllChallenges,
   getChallengeById,
   updateChallenge,
-} from "../controllers/challenge.controllers";
+} from "../controllers/challenge.controller";
 
 const challengesRoutes = Router();
 
