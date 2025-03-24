@@ -10,7 +10,8 @@ import {
 
 const challengesRoutes = Router();
 
-challengesRoutes.get("/", authMiddleware, getAllChallenges);
+// challenges kept public for now as user can see all challenges before signup
+challengesRoutes.get("/", getAllChallenges);
 challengesRoutes.post("/", authMiddleware, createChallenge);
 challengesRoutes.get("/:id", authMiddleware, getChallengeById);
 challengesRoutes.put("/:id", authMiddleware, updateChallenge);
